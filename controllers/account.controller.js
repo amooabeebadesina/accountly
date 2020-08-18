@@ -8,7 +8,12 @@ class AccountController {
 
     static getBalance(req, res) {
         try {
-
+            const { account_id } = req.query;
+            const balance = AccountServiceInstance.getBalance(account_id);
+            if (!balance) {
+                return JSONResponse.sendError(res, 404, 0);
+            }
+            return JSONResponse.sendSuccess(res, 200, balance);
         } catch (err) {
             return Helpers.handleError(res, err);
         }
@@ -21,7 +26,7 @@ class AccountController {
                 case 'deposit':
                     const createdAccount = AccountServiceInstance.depositToAccount(req.body);
                     const responseData = {destination: { id: createdAccount.id, balance: createdAccount.balance}};
-                    return JSONResponse.sendSuccess(res, 'Deposit successful', 201, responseData);
+                    return JSONResponse.sendSuccess(res,  201, responseData);
                 case 'withdraw':
                     console.log('withdraw');
                     break;

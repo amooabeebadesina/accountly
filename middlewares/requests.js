@@ -12,7 +12,7 @@ const performEventActionRequest = (req, res, next) => {
 
 const handleValidationError = (validatedData, res) => {
     const message = validatedData.error.details[0].message;
-    return JSONResponse.sendError(res, message, 400);
+    return JSONResponse.sendError(res, 400, message);
 };
 
 export {

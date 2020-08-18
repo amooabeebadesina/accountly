@@ -7,6 +7,14 @@ class AccountService {
         this.accounts = [];
     }
 
+    getBalance(accountId) {
+        const accountIndex = this.accounts.findIndex((account) => accountId === account.id);
+        if (accountIndex === -1) {
+            return null;
+        }
+        return this.accounts[accountIndex].getBalance();
+    }
+
     depositToAccount({ destination, amount }) {
         const accountIndex = this.accounts.findIndex((account) => destination === account.id);
         if (accountIndex === -1) {
