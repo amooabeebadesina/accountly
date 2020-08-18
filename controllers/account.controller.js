@@ -26,20 +26,28 @@ class AccountController {
             switch (type.toLowerCase()) {
                 case 'deposit':
                     const createdAccount = AccountServiceInstance.depositToAccount(req.body);
-                    responseData = {destination: { id: createdAccount.id, balance: createdAccount.balance}};
+                    responseData = {destination: { id: createdAccount.getId(), balance: createdAccount.getBalance()}};
                     return JSONResponse.sendSuccess(res,  201, responseData);
                 case 'withdraw':
                     const account = AccountServiceInstance.withdrawFromAccount(req.body);
                     if (!account) {
                         return JSONResponse.sendError(res, 404, 0);
                     }
-                    responseData = {origin: { id: account.id, balance: account.balance}};
+                    responseData = {origin: { id: account.getId(), balance: account.getBalance()}};
                     return JSONResponse.sendSuccess(res,  201, responseData);
                 case 'transfer':
-
+                    const originAccountExisting = AccountServiceInstance.getAccountById(req.body.origin);
+                    if (!originAccountExisting) {
+                        return JSONResponse.sendError(res, 404, 0);
+                    }
+                    const { originAccount, destinationAccount } = AccountServiceInstance.performTransfer(req.body);
+                    responseData = {
+                        origin: { id: originAccount.getId(), balance: originAccount.getBalance() },
+                        destination: { id: destinationAccount.getId(), balance: destinationAccount.getBalance() }
+                    };
+                    return JSONResponse.sendSuccess(res,  201, responseData);
             }
         } catch (err) {
-            console.log(err);
             return Helpers.handleError(res, err);
         }
     }

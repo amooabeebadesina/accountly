@@ -8,11 +8,13 @@ class AccountService {
     }
 
     getBalance(accountId) {
-        const accountIndex = this.accounts.findIndex((account) => accountId === account.id);
-        if (accountIndex === -1) {
-            return null;
-        }
-        return this.accounts[accountIndex].getBalance();
+        const account = this.accounts.find((account) => accountId === account.id);
+        return account ? account.getBalance() : null;
+    }
+
+    getAccountById(accountId) {
+        const account = this.accounts.find((account) => accountId === account.id);
+        return account || null;
     }
 
     depositToAccount({ destination, amount }) {
@@ -39,8 +41,22 @@ class AccountService {
         return account;
     }
 
-    transferFromAccount({ origin, amount }) {
-
+    performTransfer({ origin, amount, destination }) {
+        const originAccountIndex = this.accounts.findIndex((account) => origin === account.id);
+        const destinationAccountIndex = this.accounts.findIndex((account) => destination === account.id);
+        const originAccount = this.accounts[originAccountIndex];
+        originAccount.removeFromBalance(amount);
+        let destinationAccount;
+        if (destinationAccountIndex === -1) {
+            // Account does not exist. Create new destination account;
+            const newAccount = new Account(destination, amount);
+            this.accounts.push(newAccount);
+            destinationAccount = newAccount
+        } else {
+            destinationAccount = this.accounts[destinationAccountIndex];
+            destinationAccount.addToBalance(amount);
+        }
+        return { originAccount, destinationAccount };
     }
 }
 
