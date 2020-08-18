@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', function(req, res) {
   res.json({ok: true});
 });
-
+router.post('/reset', AccountController.resetAccounts);
 router.get('/balance', AccountController.getBalance);
 router.post('/event', performEventActionRequest, AccountController.performEventAction);
 

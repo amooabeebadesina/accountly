@@ -5,6 +5,14 @@ const AccountServiceInstance = new AccountService();
 
 class AccountController {
 
+    static resetAccounts(req, res) {
+        try {
+            AccountServiceInstance.resetAccounts();
+            return JSONResponse.sendSuccess(res, 200, 'OK');
+        } catch (err) {
+            return Helpers.handleError(res, err);
+        }
+    }
 
     static getBalance(req, res) {
         try {

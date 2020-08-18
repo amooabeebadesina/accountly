@@ -58,6 +58,10 @@ class AccountService {
         }
         return { originAccount, destinationAccount };
     }
+
+    resetAccounts() {
+        this.accounts = [];
+    }
 }
 
 export default AccountService;
