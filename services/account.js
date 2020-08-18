@@ -28,6 +28,20 @@ class AccountService {
             return account;
         }
     }
+
+    withdrawFromAccount({ origin, amount }) {
+        const accountIndex = this.accounts.findIndex((account) => origin === account.id);
+        if (accountIndex === -1) {
+            return null;
+        }
+        const account = this.accounts[accountIndex];
+        account.removeFromBalance(amount);
+        return account;
+    }
+
+    transferFromAccount({ origin, amount }) {
+
+    }
 }
 
 export default AccountService;

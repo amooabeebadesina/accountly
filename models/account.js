@@ -17,6 +17,10 @@ class Account {
     addToBalance(amount) {
         this.balance += amount;
     }
+
+    removeFromBalance(amount) {
+        this.balance -= amount;
+    }
 }
 
 export default Account;

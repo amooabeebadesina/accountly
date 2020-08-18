@@ -22,14 +22,21 @@ class AccountController {
     static performEventAction(req, res) {
         try {
             const { type } = req.body;
+            let responseData;
             switch (type.toLowerCase()) {
                 case 'deposit':
                     const createdAccount = AccountServiceInstance.depositToAccount(req.body);
-                    const responseData = {destination: { id: createdAccount.id, balance: createdAccount.balance}};
+                    responseData = {destination: { id: createdAccount.id, balance: createdAccount.balance}};
                     return JSONResponse.sendSuccess(res,  201, responseData);
                 case 'withdraw':
-                    console.log('withdraw');
-                    break;
+                    const account = AccountServiceInstance.withdrawFromAccount(req.body);
+                    if (!account) {
+                        return JSONResponse.sendError(res, 404, 0);
+                    }
+                    responseData = {origin: { id: account.id, balance: account.balance}};
+                    return JSONResponse.sendSuccess(res,  201, responseData);
+                case 'transfer':
+
             }
         } catch (err) {
             console.log(err);
